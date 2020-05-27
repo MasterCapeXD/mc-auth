@@ -44,12 +44,12 @@ public class BungeeAccount implements Account {
 		}
 		
 		if (passwordHash.equals(getPasswordHash())) {
-			if (getHashType() != hashType) {
+			if (getHashType() != hashType)
 				setHashType(hashType);
-				setPasswordHash(hashType.getHashFunction().newHasher().putString(password, Charsets.UTF_8).hash().toString());
-				setLastIpAddress(proxiedPlayer.getAddress().getHostString());
-				setLastSessionStart(System.currentTimeMillis());
-			}
+			
+			setPasswordHash(hashType.getHashFunction().newHasher().putString(password, Charsets.UTF_8).hash().toString());
+			setLastIpAddress(proxiedPlayer.getAddress().getHostString());
+			setLastSessionStart(System.currentTimeMillis());
 			return SessionResult.LOGIN_SUCCESS;
 		}
 		
