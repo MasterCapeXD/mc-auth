@@ -1,0 +1,141 @@
+# How the plugin should store data
+# Possible options: MYSQL, SQLITE
+storage-type: MYSQL
+
+# The following block defines the settings for remote database storage methods.
+# You have to set it up if you are using these storage types: MYSQL
+data:
+  host: localhost
+  database: database
+  username: username
+  password: password
+  port: 3306
+  
+  pool-settings:
+    # Sets the maximum size of the MySQL connection pool.
+    # - More information about determining the size of connection pools can be found here:
+    #   https://github.com/brettwooldridge/HikariCP/wiki/About-Pool-Sizing
+    maximum-pool-size: 10
+    # Sets the minimum number of idle connections that the pool will try to maintain.
+    # - For maximum performance and responsiveness to spike demands, it is recommended to not set
+    #   this value and instead allow the pool to act as a fixed size connection pool.
+    #   (set this value to the same as 'maximum-pool-size')
+    minimum-idle: 10
+    # This setting controls the maximum lifetime of a connection in the pool in milliseconds.
+    # - The value should be at least 30 seconds less than any database or infrastructure imposed
+    #   connection time limit.
+    maximum-lifetime: 30m
+    # This setting controls the maximum number of milliseconds that the plugin will wait for a
+    # connection from the pool, before timing out.
+    connection-timeout: 5s
+
+email:
+  enabled: false
+  smtp: 'smtp.gmail.com'
+  username: 'mcxdauth@gmail.com'
+  password: password
+  company: mc.servername.net
+  letters:
+    NEW_PASSWORD:
+      subject: 'New password'
+      text: '<center><h1>Auth | New %player%''s password: %password%</h></center>'
+    CONFIRM_CODE:
+      subject: 'Confirm your email'
+      text: '<center><h1>Auth | Please enter this command in the game: /email confirm %code%</h></center>'
+
+# This is the list of servers the plugin will connect unauthorized players.
+auth-servers:
+- AUTH-1:50 # The server BungeeCord identifier with the maximum priority and max players on this server.
+- AUTH-2:50 # The server BungeeCord identifier the plugin will connect players if the previous server connections failed and max players on this server.
+
+# This is the list of servers the plugin will connect authorized players.
+game-servers:
+- HUB-1:100 # The server BungeeCord identifier with the maximum priority and max players on this server.
+- HUB-2:100 # The server BungeeCord identifier the plugin will connect players if the previous server connections failed and max players on this server.
+
+# How the plugin should identificate players
+# Possible options: UUID, NAME
+id-type: NAME
+
+# If enabled, the plugin will block an attempt to connect a registered player if his name is written in wrong case.
+# For example: The plugin will block a player connection if the player was registered with name Notch and tries to join with names: nOtCH, notch, NOTCH etc.
+# You can disable it if you are using id-type: UUID.
+check-name-case: true
+
+# The RegEx pattern of enabled name symbols.
+name-regex-pattern: '[a-zA-Z0-9_]*'
+
+# The RegEx pattern of enabled password symbols.
+password-regex-pattern: '[a-zA-Z0-9_$#@^-]*'
+
+# How the plugin should hash user passwords.
+# Possible options: MD5, SHA256
+hash-type: SHA256
+
+# Should the players confirm their password on register
+enable-password-confirm: false
+# Minimum amount of password symbols
+password-min-length: 5
+# Maximum amount of password symbols
+password-max-length: 20
+# The number of attempts to enter the correct password before the player will be kicked from the server.
+password-attempts: 3
+# How long time the one-ip session should be active
+session-durability: 4h
+# How much time players have to login (in seconds)
+auth-time: 60
+
+messages:
+  time-left: '&cTime left. Please try again.'
+  register-chat: '&fPlease register using the command &e/register <password>'
+  register-title: '&eRegistration'
+  register-subtitle: '&fPlease enter &e/register <password>'
+  login-chat: '&fPlease log-in using the command &e/login <password>'
+  login-title: '&eAuthentication'
+  login-subtitle: '&fPlease enter &e/login <password>'
+  illegal-name-chars: '&cYour nickname contains illegal characters!'
+  attempts-limit: '&cYou have reached the password attempt limit!'
+  auth-servers-connection-refused: '&cUnable to connect to the auth server. Please try later.'
+  game-servers-connection-refused: '&cUnable to join the game server. Please try later.'
+  disabled-command: '&cThis command is disabled in authentication mode!'
+  players-only: '&cThis command can be executed by players only!'
+  already-logged-in: '&cYou are already logged in.'
+  already-logged-out: '&cYou are not logged in.'
+  account-exists: '&cThis account already exists. Please log-in.'
+  account-not-found: '&cAccount not found! Please register.'
+  enter-password: '&cPlease enter your password.'
+  enter-new-password: '&cPlease enter your old password and the new password.'
+  wrong-old-password: '&cWrong password!'
+  nothing-to-change: '&cYour passwords are equal.'
+  change-success: '&aYour password has been changed.'
+  confirm-password: '&cPlease confirm your password.'
+  confirm-failed: '&cPasswords are different!'
+  password-too-short: '&cYour password is too short!'
+  password-too-long: '&cYour password is too long!'
+  illegal-password-chars: '&cYour password contains illegal characters!'
+  wrong-password: '&cWrong password. You have %attempts% attempts left.'
+  register-success: '&aYou have registered.'
+  login-success: '&aYou have logged in.'
+  logout-success: '&aYou have logged out.'
+  email-disabled: '&cEmail recovery disabled.'
+  no-email: '&cYou do not have email registered.'
+  enter-email: '&cPlease enter your email address.'
+  wrong-email-format: '&cEmail format is wrong.'
+  duplicated-email: '&cThis email already is using.'
+  email-error: '&cAn internal error occured while sending email: Unable to send email.'
+  confirmation-email-sent: '&aWe sent a message with confirmation code. Please check your email. Do not quit the server!'
+  email-already-sent: '&cCode already sent. Please check your email.'
+  no-code: '&cNothing to confirm.'
+  enter-code: '&cPlease enter confirmation code.'
+  wrong-code: '&cWrong confirmation code!'
+  email-registered: '&aYour email address registered successfully!'
+  email-deleted: '&aEmail deleted.'
+  recovery-request-already-sent: '&cRecovery request already sent. Please check your email.'
+  new-password-email-sent: '&cWe sent a message with a new password. Please check your email and try to log-in. Do not quit the server!'
+  wrong-email: '&cRequest refused. Please try again.'
+  autoconnect: '&aSession is restored. Connecting to the server...'
+
+  no-permission: '&cYou do not have permission to do that.'
+  info-registered: '&fPlayers registered: &e%players%'
+  info-auth: '&fPlayers on auth servers: &e%players%'
+  info-version: '&fVersion: &e%version%'
