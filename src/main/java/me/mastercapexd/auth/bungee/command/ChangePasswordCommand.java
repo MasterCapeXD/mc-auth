@@ -1,7 +1,5 @@
 package me.mastercapexd.auth.bungee.command;
 
-import com.google.common.base.Charsets;
-
 import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.bungee.BungeeAccount;
 import me.mastercapexd.auth.storage.AccountStorage;
@@ -47,8 +45,7 @@ public class ChangePasswordCommand extends Command {
 				return;
 			}
 			
-			String oldPasswordHash = account.getHashType().getHashFunction().newHasher().putString(oldPassword, Charsets.UTF_8).hash().toString();
-			if (!oldPasswordHash.equals(account.getPasswordHash())) {
+			if (!account.getHashType().checkHash(oldPassword, account.getPasswordHash())) {
 				sender.sendMessage(config.getMessages().getMessage("wrong-old-password"));
 				return;
 			}
@@ -56,8 +53,7 @@ public class ChangePasswordCommand extends Command {
 			BungeeAccount bungeeAccount = (BungeeAccount) account;
 			if (account.getHashType() != config.getActiveHashType())
 				bungeeAccount.setHashType(config.getActiveHashType());
-			
-			bungeeAccount.setPasswordHash(config.getActiveHashType().getHashFunction().newHasher().putString(newPassword, Charsets.UTF_8).hash().toString());
+			bungeeAccount.setPasswordHash(account.getHashType().hash(newPassword));
 			accountStorage.saveOrUpdateAccount(account);
 			sender.sendMessage(config.getMessages().getMessage("change-success"));
 		});

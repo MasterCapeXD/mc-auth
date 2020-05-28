@@ -5,8 +5,6 @@ import java.security.SecureRandom;
 
 import javax.mail.MessagingException;
 
-import com.google.common.base.Charsets;
-
 import me.mastercapexd.auth.Auth;
 import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.bungee.BungeeAccount;
@@ -98,7 +96,7 @@ public class RecoveryCommand extends Command {
 				if (account.getHashType() != config.getActiveHashType())
 					bungeeAccount.setHashType(config.getActiveHashType());
 				
-				bungeeAccount.setPasswordHash(config.getActiveHashType().getHashFunction().newHasher().putString(password, Charsets.UTF_8).hash().toString());
+				bungeeAccount.setPasswordHash(config.getActiveHashType().hash(password));
 				accountStorage.saveOrUpdateAccount(account);
 				sender.sendMessage(config.getMessages().getMessage("new-password-email-sent"));
 			} catch (UnsupportedEncodingException | MessagingException e) {

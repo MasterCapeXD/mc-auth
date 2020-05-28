@@ -2,8 +2,6 @@ package me.mastercapexd.auth.bungee;
 
 import java.util.UUID;
 
-import com.google.common.base.Charsets;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -34,7 +32,7 @@ public class BungeeAccount implements Account {
 	@Override
 	public SessionResult newSession(HashType hashType, String password) {
 		ProxiedPlayer proxiedPlayer = identifierType.getPlayer(getId());
-		String passwordHash = getHashType().getHashFunction().newHasher().putString(password, Charsets.UTF_8).hash().toString();
+		String passwordHash = getHashType().hash(password);
 		
 		if (!isRegistered()) {
 			setPasswordHash(passwordHash);
@@ -43,16 +41,15 @@ public class BungeeAccount implements Account {
 			return SessionResult.REGISTER_SUCCESS;
 		}
 		
-		if (passwordHash.equals(getPasswordHash())) {
-			if (getHashType() != hashType)
+		if (getHashType().checkHash(password, getPasswordHash())) {
+			if (getHashType() != hashType) {
 				setHashType(hashType);
-			
-			setPasswordHash(hashType.getHashFunction().newHasher().putString(password, Charsets.UTF_8).hash().toString());
+				setPasswordHash(hashType.hash(password));
+			}
 			setLastIpAddress(proxiedPlayer.getAddress().getHostString());
 			setLastSessionStart(System.currentTimeMillis());
 			return SessionResult.LOGIN_SUCCESS;
 		}
-		
 		return SessionResult.LOGIN_WRONG_PASSWORD;
 	}
 	
