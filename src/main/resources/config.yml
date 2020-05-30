@@ -69,7 +69,7 @@ name-regex-pattern: '[a-zA-Z0-9_]*'
 password-regex-pattern: '[a-zA-Z0-9_$#@^-]*'
 
 # How the plugin should hash user passwords.
-# Possible options: MD5, SHA256
+# Possible options: MD5, SHA256, BCRYPT
 hash-type: SHA256
 
 # Should the players confirm their password on register
@@ -134,6 +134,7 @@ messages:
   new-password-email-sent: '&cWe sent a message with a new password. Please check your email and try to log-in. Do not quit the server!'
   wrong-email: '&cRequest refused. Please try again.'
   autoconnect: '&aSession is restored. Connecting to the server...'
+  check-name-case-failed: '&cWrong name. This account is registered with name %correct%. Connection refused for name %failed%.'
 
   no-permission: '&cYou do not have permission to do that.'
   info-registered: '&fPlayers registered: &e%players%'

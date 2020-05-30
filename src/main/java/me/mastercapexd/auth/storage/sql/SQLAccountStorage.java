@@ -41,7 +41,7 @@ public abstract class SQLAccountStorage implements AccountStorage {
 	protected void updateAccount(Account account) {
 		try (Connection connection = this.getConnection()) {
 			PreparedStatement statement = connection.prepareStatement(UPDATE_ID);
-			statement.setString(1, account.getId());
+			statement.setString(1, account.getIdentifierType() == IdentifierType.NAME ? account.getId().toLowerCase() : account.getId());
 			statement.setString(2, account.getUniqueId().toString());
 			statement.setString(3, account.getName());
 			statement.setString(4, account.getPasswordHash());
@@ -184,5 +184,6 @@ public abstract class SQLAccountStorage implements AccountStorage {
 				e.printStackTrace();
 			}
 		});
+		executorService.shutdown();
 	}
 }

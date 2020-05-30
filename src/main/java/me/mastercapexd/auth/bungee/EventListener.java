@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.mastercapexd.auth.Account;
 import me.mastercapexd.auth.AccountFactory;
 import me.mastercapexd.auth.Auth;
+import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.PluginConfig;
 import me.mastercapexd.auth.storage.AccountStorage;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -30,6 +31,21 @@ public class EventListener implements Listener {
 			event.setCancelReason(config.getMessages().getMessage("illegal-name-chars"));
 			event.setCancelled(true);
 		}
+		
+		if (!config.isNameCaseCheckEnabled())
+			return;
+		
+		IdentifierType identifierType = config.getActiveIdentifierType();
+		String id = identifierType == IdentifierType.UUID ? event.getConnection().getUniqueId().toString() : name.toLowerCase();
+		
+		accountStorage.getAccount(id).thenAccept(account -> {
+			if (account == null)
+				return;
+			if (account.getName().equals(name))
+				return;
+			event.setCancelReason(config.getMessages().getMessage("check-name-case-failed").replace("%correct%", account.getName()).replace("%failed%", name));
+			event.setCancelled(true);
+		});
 	}
 	
 	@EventHandler

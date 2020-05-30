@@ -15,10 +15,11 @@ public enum IdentifierType {
 		public ProxiedPlayer getPlayer(String id) {
 			return BungeeCord.getInstance().getPlayer(java.util.UUID.fromString(id));
 		}
-	}, NAME {
+	},
+	NAME {
 		@Override
 		public String getId(ProxiedPlayer proxiedPlayer) {
-			return proxiedPlayer.getName();
+			return proxiedPlayer.getName().toLowerCase();
 		}
 		
 		@Override

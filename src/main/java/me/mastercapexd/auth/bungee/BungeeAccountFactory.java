@@ -12,7 +12,7 @@ public class BungeeAccountFactory implements AccountFactory {
 	@Override
 	public Account createAccount(String id, IdentifierType identifierType, UUID uuid, String name, HashType hashType,
 			String password, String email, long lastQuit, String lastIp, long lastSessionStart, long sessionTime) {
-		BungeeAccount account = new BungeeAccount(id, identifierType, uuid, name);
+		BungeeAccount account = new BungeeAccount(identifierType == IdentifierType.NAME ? id.toLowerCase() : id, identifierType, uuid, name);
 		account.setHashType(hashType);
 		account.setPasswordHash(password);
 		account.setEmail(email);
