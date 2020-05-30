@@ -41,6 +41,8 @@ public interface PluginConfig {
 	
 	long getAuthTime();
 	
+	boolean isSafeStartEnabled();
+	
 	Messages getMessages();
 	
 	ServerInfo findServerInfo(List<Server> servers);

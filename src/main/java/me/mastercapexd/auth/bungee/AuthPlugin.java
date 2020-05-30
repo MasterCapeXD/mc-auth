@@ -1,7 +1,11 @@
 package me.mastercapexd.auth.bungee;
 
+import java.util.Collection;
+
+import me.mastercapexd.auth.Account;
 import me.mastercapexd.auth.AccountFactory;
 import me.mastercapexd.auth.AuthEngine;
+import me.mastercapexd.auth.IdentifierType;
 import me.mastercapexd.auth.bungee.command.AuthCommand;
 import me.mastercapexd.auth.bungee.command.ChangePasswordCommand;
 import me.mastercapexd.auth.bungee.command.EmailCommand;
@@ -46,6 +50,20 @@ public class AuthPlugin extends Plugin {
 			this.emailService = new EmailService(config.getEmailSettings());
 		this.getProxy().getPluginManager().registerCommand(this, new EmailCommand(config, accountStorage, emailService));
 		this.getProxy().getPluginManager().registerCommand(this, new RecoveryCommand(config, accountStorage, emailService));
+		
+		if (config.isSafeStartEnabled())
+			safeStart();
+	}
+	
+	private void safeStart() {
+		accountStorage.getAllAccounts().thenAccept(accounts -> {
+			Collection<Account> result = accounts;
+			for (Account account : result) {
+				Account safe = accountFactory.createAccount(account.getIdentifierType() == IdentifierType.NAME ? account.getId().toLowerCase() : account.getId(),
+						account.getIdentifierType(), account.getUniqueId(), account.getName(), account.getHashType(), account.getPasswordHash(), account.getEmail(), account.getLastQuitTime(), account.getLastIpAddress(), account.getLastSessionStart(), config.getSessionDurability());
+				accountStorage.saveOrUpdateAccount(safe);
+			}
+		});
 	}
 	
 	private AccountStorage loadAccountStorage(StorageType storageType) {

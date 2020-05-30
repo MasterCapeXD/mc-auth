@@ -85,6 +85,10 @@ session-durability: 4h
 # How much time players have to login (in seconds)
 auth-time: 60
 
+# You should set it to true if you have updated the plugin and try to run it first time after update.
+# Next time you should disable it.
+safe-start: false
+
 messages:
   time-left: '&cTime left. Please try again.'
   register-chat: '&fPlease register using the command &e/register <password>'

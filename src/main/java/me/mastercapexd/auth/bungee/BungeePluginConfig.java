@@ -36,7 +36,7 @@ import net.md_5.bungee.config.YamlConfiguration;
 public class BungeePluginConfig implements PluginConfig {
 
 	private final IdentifierType activeIdentifierType;
-	private final boolean nameCaseCheckEnabled, passwordConfirmationEnabled;
+	private final boolean nameCaseCheckEnabled, passwordConfirmationEnabled, safeStartEnabled;
 	private final HashType activeHashType;
 	private final StorageType storageType;
 	private final Pattern namePattern, passwordPattern;
@@ -65,6 +65,7 @@ public class BungeePluginConfig implements PluginConfig {
 		this.passwordAttempts = config.getInt("password-attempts");
 		this.sessionDurability = TimeUtils.parseTime(config.getString("session-durability"));
 		this.authTime = config.getLong("auth-time");
+		this.safeStartEnabled = config.getBoolean("safe-start");
 		
 		this.authServers = ImmutableList.copyOf(config.getStringList("auth-servers")
 				.stream().map(stringFormat -> new Server(stringFormat)).collect(Collectors.toList()));
